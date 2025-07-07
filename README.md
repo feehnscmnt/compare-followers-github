@@ -1,2 +1,7 @@
-# compare-followers-github
-Aplicação Java para comparar os seguidores do Github.
+# Comparador de Seguidores
+Software Java para comparar os seguidores do Github.
+Em resumo, este software irá gerar duas listas: uma com a quantidade de seguidores e uma com a quantidade de seguidos.
+Após isso, fará uma comparação entre as duas listas e quem **segue** e não é **seguido**, passará a ser **seguido**. E quem é **seguido** e não **segue de volta**, deixará de ser **seguido**. Desta forma, a quantidade de **seguidores** e de **seguidos** ficará igual. Observem o meu perfil e comprovem.
+
+# <b style="color:red;">CUIDADO</b>
+Se você tem toq por conta de seguidores, não use este software!
