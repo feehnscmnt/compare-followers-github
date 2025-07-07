@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<token>your_auth_token</token>
+	
+	<urlGetFollowers>https://api.github.com/users/your_user/followers</urlGetFollowers>
+	<urlGetFollowing>https://api.github.com/users/your_user/following</urlGetFollowing>
+	
+	<urlSetFollowUnfollow>https://api.github.com/user/following</urlSetFollowUnfollow>
+	
+</config>
