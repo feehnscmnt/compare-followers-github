@@ -3,8 +3,8 @@
 
 	<token>your_auth_token</token>
 	
-	<urlGetFollowers>https://api.github.com/users/your_user/followers</urlGetFollowers>
-	<urlGetFollowing>https://api.github.com/users/your_user/following</urlGetFollowing>
+	<urlGetFollowers>https://api.github.com/users/feehnscmnt/followers</urlGetFollowers>
+	<urlGetFollowing>https://api.github.com/users/feehnscmnt/following</urlGetFollowing>
 	
 	<urlSetFollowUnfollow>https://api.github.com/user/following</urlSetFollowUnfollow>
 	

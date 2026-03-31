@@ -1,6 +1,7 @@
 package br.com.comparador.model;
 
 import com.google.gson.annotations.SerializedName;
+import lombok.ToString;
 import lombok.Data;
 
 /**
@@ -11,6 +12,7 @@ import lombok.Data;
  */
 
 @Data
+@ToString
 public class MessageModel {
 	private String message;
 	

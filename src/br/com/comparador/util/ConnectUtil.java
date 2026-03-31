@@ -1,11 +1,18 @@
 package br.com.comparador.util;
 
+import java.security.NoSuchAlgorithmException;
 import br.com.comparador.model.MessageModel;
+import java.security.KeyManagementException;
 import br.com.comparador.model.FollowModel;
+import java.security.cert.X509Certificate;
 import com.google.gson.reflect.TypeToken;
+import javax.net.ssl.X509TrustManager;
 import java.net.URISyntaxException;
+import java.security.SecureRandom;
+import javax.net.ssl.TrustManager;
 import java.net.http.HttpResponse;
 import java.net.http.HttpRequest;
+import javax.net.ssl.SSLContext;
 import java.net.http.HttpClient;
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -49,7 +56,12 @@ public class ConnectUtil {
 		var follow = new ArrayList<FollowModel>();
 		var url = urlApi;
 		
-		try (var client = HttpClient.newHttpClient()) {
+		try {
+			
+			var sslContext = SSLContext.getInstance("TLS");
+			sslContext.init(null, getTrustAllCerts(), new SecureRandom());
+			
+			var client = HttpClient.newBuilder().sslContext(sslContext).build();
 			
 			while (Objects.nonNull(url)) {
 				
@@ -84,7 +96,7 @@ public class ConnectUtil {
 				
 			}
 			
-		} catch (URISyntaxException | IOException | InterruptedException e) {
+		} catch (IOException | InterruptedException | NoSuchAlgorithmException | KeyManagementException | URISyntaxException e) {
 			
 			Thread.currentThread().interrupt();
 			LOG.log(Level.SEVERE, LogConsoleColorsUtil.ANSI_RED_LOG, String.format("Houve um erro inesperado no método getResponseApi. Exception: %s", e.getMessage()));
@@ -109,7 +121,12 @@ public class ConnectUtil {
 	 */
 	public static Integer setFollowUnfollow(String urlApi, String token, boolean followUnfollow) {
 		
-		try (var client = HttpClient.newHttpClient()) {
+		try {
+			
+			var sslContext = SSLContext.getInstance("TLS");
+			sslContext.init(null, getTrustAllCerts(), new SecureRandom());
+			
+			var client = HttpClient.newBuilder().sslContext(sslContext).build();
 			
 			var requestBuilder = HttpRequest
 				.newBuilder()
@@ -131,7 +148,7 @@ public class ConnectUtil {
 			
 			client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).thenAccept(response -> statusCode = response.statusCode()).join();
 			
-		} catch (URISyntaxException e) {
+		} catch (URISyntaxException | NoSuchAlgorithmException | KeyManagementException e) {
 			
 			LOG.log(Level.SEVERE, LogConsoleColorsUtil.ANSI_RED_LOG, String.format("Houve um erro inesperado no método setFollowUnfollow. Exception: %s", e.getMessage()));
 			
@@ -166,5 +183,63 @@ public class ConnectUtil {
         return null;
         
     }
+	
+	/**
+	 * Método responsável por ignorar a validação de certificados.
+	 * Utilizar somente em ambientes de testes e de desenvolvimento.
+	 * 
+	 * @return um objeto {@link TrustManager} que aceita todos os certificados
+	 * 
+	 */
+	private static TrustManager[] getTrustAllCerts() {
+		
+		return new TrustManager[] {
+				
+            new X509TrustManager() {
+            	
+                public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
+                
+                public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                	
+                	try {
+                		
+                		for (X509Certificate cert : certs) {
+                			
+	                		cert.checkValidity();
+	                		cert.verify(cert.getPublicKey());
+	                		
+	                	}
+                		
+                	} catch (Exception e) {
+                		
+                		throw new IllegalArgumentException(e.getMessage(), e.getCause());
+                		
+                	}
+                	
+                }
+                
+                public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                	
+                	try {
+                		
+                		for (X509Certificate cert : certs) {
+                			
+                			cert.checkValidity();
+                			
+                		}
+                		
+                	} catch (Exception e) {
+                		
+                		throw new IllegalArgumentException(e.getMessage(), e.getCause());
+                		
+                	}
+                	
+                }
+                
+            }
+            
+        };
+		
+	}
 	
 }

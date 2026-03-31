@@ -1,6 +1,7 @@
 package br.com.comparador.model;
 
 import jakarta.xml.bind.annotation.XmlRootElement;
+import lombok.ToString;
 import lombok.Data;
 
 /**
@@ -11,6 +12,7 @@ import lombok.Data;
  */
 
 @Data
+@ToString
 @XmlRootElement(name="config")
 public class ConfigModel {
 	private String token;

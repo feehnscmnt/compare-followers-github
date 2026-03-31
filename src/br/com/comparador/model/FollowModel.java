@@ -1,6 +1,7 @@
 package br.com.comparador.model;
 
 import com.google.gson.annotations.SerializedName;
+import lombok.ToString;
 import lombok.Data;
 
 /**
@@ -11,9 +12,10 @@ import lombok.Data;
  */
 
 @Data
+@ToString
 public class FollowModel {
 	private String login;
-    private int id;
+    private Integer id;
     
     @SerializedName("node_id")
     private String nodeId;
@@ -62,5 +64,5 @@ public class FollowModel {
     private String userViewType;
     
     @SerializedName("site_admin")
-    private boolean siteAdmin;
+    private Boolean siteAdmin;
 }
